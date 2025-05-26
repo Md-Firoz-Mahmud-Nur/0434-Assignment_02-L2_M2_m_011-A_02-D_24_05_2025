@@ -1,5 +1,4 @@
 -- Active: 1747889982201@@127.0.0.1@5432@conservation_db
-CREATE DATABASE conservation_db;
 
 CREATE TABLE rangers (
     ranger_id SERIAL PRIMARY KEY,
@@ -132,3 +131,49 @@ FROM (
         GROUP BY
             ranger_id
     )
+
+-- 05. List species that have never been sighted.
+SELECT common_name
+FROM species
+WHERE
+    species_id NOT in (
+        SELECT species_id
+        FROM sightings
+    );
+
+-- 06. Show the most recent 2 sightings.
+SELECT species.common_name, sightings.sighting_time, rangers.name
+FROM
+    sightings
+    JOIN rangers ON sightings.ranger_id = rangers.ranger_id
+    JOIN species ON sightings.species_id = species.species_id
+ORDER BY sighting_time DESC
+LIMIT 2;
+
+-- 07. Update all species discovered before year 1800 to have status 'Historic'.
+UPDATE species
+SET
+    conservation_status = 'Historic'
+WHERE
+    EXTRACT(
+        YEAR
+        FROM discovery_date
+    ) < 1800;
+
+-- 08. Label each sighting's time of day as 'Morning', 'Afternoon', or 'Evening'.
+SELECT
+    sighting_id,
+    CASE
+        WHEN sighting_time::time < '12:00:00' THEN 'Morning'
+        WHEN sighting_time::time < '17:00:00' THEN 'Afternoon'
+        ELSE 'Evening'
+    END AS time_of_day
+FROM sightings;
+
+-- 09. Delete rangers who have never sighted any species
+DELETE FROM rangers
+WHERE
+    ranger_id NOT IN (
+        SELECT ranger_id
+        FROM sightings
+    );
