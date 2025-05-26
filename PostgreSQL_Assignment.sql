@@ -18,8 +18,6 @@ VALUES (
         'Mountain Range'
     );
 
-SELECT * FROM rangers;
-
 CREATE TABLE species (
     species_id SERIAL PRIMARY KEY,
     common_name VARCHAR(100) NOT NULL,
@@ -59,8 +57,6 @@ VALUES (
         '1758-01-01',
         'Endangered'
     );
-
-SELECT * FROM species;
 
 CREATE TABLE sightings (
     sighting_id SERIAL PRIMARY KEY,
@@ -107,8 +103,6 @@ VALUES (
         '2024-05-18 18:30:00',
         NULL
     );
-
-SELECT * FROM sightings;
 
 -- 01. Register a new ranger with provided data with name = 'Derek Fox' and region = 'Coastal Plains'
 INSERT INTO
