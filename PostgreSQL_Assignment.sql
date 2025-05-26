@@ -165,7 +165,7 @@ SELECT
     sighting_id,
     CASE
         WHEN sighting_time::time < '12:00:00' THEN 'Morning'
-        WHEN sighting_time::time < '17:00:00' THEN 'Afternoon'
+        WHEN sighting_time::time <= '17:00:00' THEN 'Afternoon'
         ELSE 'Evening'
     END AS time_of_day
 FROM sightings;
